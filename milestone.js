@@ -14,10 +14,15 @@ const data = [
 
 const margin = { 'left': 20, 'right': 20}
 const width = 1000 - margin.left - margin.right
+const monthWidth = width / 12
+const monthPadding = 5
 const timeline = d3.select('#milestone')
 
 const maxDate = d3.max(((data.map(d => new Date(d.date)))))
 const minDate = d3.min(((data.map(d => new Date(d.date)))))
+const monthRange = d3.range(0,12,1)
+const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
 
 console.log(data.map(d => new Date(d.date)))
 console.log(minDate)
@@ -27,11 +32,11 @@ let x = d3.scaleLinear()
     .domain([minDate, maxDate])
     .range([0, width])
 
-// let y = d3.scaleLinear()
-//     .range([height, 0]);
+let monthX = d3.scaleLinear()
+    .domain([0,12])
+    .range([0, width])
 
-// let xScale = d3.scaleLinear().domain([0, 1]).range([0, this.props.width])
-// let yScale = d3.scaleLinear().domain([0, 1]).range([0, this.props.height])
+// monthDates.map((d) =>  console.log(new Date(d).getMonth()))
 
 console.log(minDate.getTime(), maxDate.getTime())
 
@@ -57,3 +62,14 @@ timeline
     .attr('cy', 80)
     .attr('r', 10)
     .style('opacity', 0.3)
+
+timeline
+    .append("g")
+    .selectAll('rect')
+    .data(monthRange)
+    .join("rect")
+    .attr('x', (d) => monthX(d) + margin.left)
+    .attr('width', monthWidth - monthPadding)
+    .attr('height', 30)
+    .attr('y', 100)
+    .style('fill', 'green')

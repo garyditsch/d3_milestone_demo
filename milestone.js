@@ -1,3 +1,4 @@
+// https://www.d3indepth.com/scales/
 
 const data = [
     { date: '1/1/2021', value: 16 },
@@ -36,8 +37,6 @@ let monthX = d3.scaleLinear()
     .domain([0,12])
     .range([0, width])
 
-// monthDates.map((d) =>  console.log(new Date(d).getMonth()))
-
 console.log(minDate.getTime(), maxDate.getTime())
 
 timeline
@@ -63,6 +62,7 @@ timeline
     .attr('r', 10)
     .style('opacity', 0.3)
 
+
 timeline
     .append("g")
     .selectAll('rect')
@@ -72,4 +72,17 @@ timeline
     .attr('width', monthWidth - monthPadding)
     .attr('height', 30)
     .attr('y', 100)
-    .style('fill', 'green')
+    .style('fill', "rgb(209, 227, 243)")
+
+
+timeline
+    .append("g")
+    .selectAll('text')
+    .data(monthRange)
+    .enter().append('text')
+    .attr('x', (d) => monthX(d) + margin.left + 10)
+    .attr('y', 125)
+    .attr('height', 20)
+    .attr('width', 25)
+    .text(d => monthLabels[d])
+    .style('fill', '#000')

@@ -1,25 +1,31 @@
 
 const data = [
-    { date: '7/1/2021', value: 10 },
-    { date: '7/2/2021', value: 8 },
+    { date: '1/1/2021', value: 16 },
+    { date: '2/1/2021', value: 10 },
+    { date: '9/13/2021', value: 16 },
+    { date: '4/2/2021', value: 8 },
+    { date: '6/3/2021', value: 6 },
     { date: '7/3/2021', value: 6 },
-    { date: '7/4/2021', value: 14 },
-    { date: '7/6/2021', value: 16 },
-    { date: '7/7/2021', value: 16 },
-    { date: '7/8/2021', value: 14 },
-    { date: '8/6/2021', value: 16 },
-    { date: '9/7/2021', value: 16 }
+    { date: '8/3/2021', value: 6 },
+    { date: '9/3/2021', value: 6 },
+    { date: '9/5/2021', value: 6 },
+    { date: '12/31/2021', value: 6 }
 ]
 
-const width = '100%'
+const margin = { 'left': 20, 'right': 20}
+const width = 1000 - margin.left - margin.right
 const timeline = d3.select('#milestone')
 
-const maxDate = new Date(d3.max(data.map(d => d.date)))
-const minDate = new Date(d3.min(data.map(d => d.date)))
+const maxDate = d3.max(((data.map(d => new Date(d.date)))))
+const minDate = d3.min(((data.map(d => new Date(d.date)))))
+
+console.log(data.map(d => new Date(d.date)))
+console.log(minDate)
+console.log(maxDate)
 
 let x = d3.scaleLinear()
     .domain([minDate, maxDate])
-    .range([0, width]);
+    .range([0, width])
 
 // let y = d3.scaleLinear()
 //     .range([height, 0]);
@@ -30,10 +36,24 @@ let x = d3.scaleLinear()
 console.log(minDate.getTime(), maxDate.getTime())
 
 timeline
-    .append("line")
-    .attr('stroke', 'blue')
-    .attr('stroke-width', '5')
-    .attr('x1', x(minDate))
-    .attr('x2', x(maxDate))
-    .attr('y1', 100)
-    .attr('y2', 100)
+    .append("g")
+        .append("line")
+        .attr('stroke', 'blue')
+        .attr('stroke-width', '2')
+        .attr('x1', x(minDate) + margin.left)
+        .attr('x2', x(maxDate) + margin.left)
+        .attr('y1', 80)
+        .attr('y2', 80)
+
+timeline
+    .append("g")
+    .selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+    .attr('width', 5)
+    .attr('height', 20)
+    .attr('cx', (d,i) => x(new Date(d.date).getTime()) + margin.left)
+    .attr('cy', 80)
+    .attr('r', 10)
+    .style('opacity', 0.3)
